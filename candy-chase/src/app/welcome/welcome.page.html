@@ -1,0 +1,20 @@
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Welcome to the Candy Chase!</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <h1>Welcome to the Candy Chase!🍭</h1>
+  <h2>Leaderboard</h2>
+  <ion-list lines="full">
+    <ion-item>hello</ion-item>
+  </ion-list>
+  <ion-button id="new-round" shape="round" size="large">START NEW ROUND</ion-button>
+  <ion-alert
+    trigger="new-round"
+    header="Please enter your name"
+    [buttons]="alertButtons"
+    [inputs]="alertInputs"
+  ></ion-alert>
+</ion-content>

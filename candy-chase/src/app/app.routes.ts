@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'instructions',
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
   },
   {
