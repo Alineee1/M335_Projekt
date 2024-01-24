@@ -81,6 +81,30 @@
    * Dark Colors
    * -------------------------------------------
    */
+  @font-face {
+    font-family: 'Hey Elsie';
+    src: url('../assets/fonts/Hey Elsie.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'Metropolis-Black';
+    src: url('../assets/fonts/Metropolis-Black.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'Metropolis-ExtraBold';
+    src: url('../assets/fonts/Metropolis-ExtraBold.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'Metropolis-Bold';
+    src: url('../assets/fonts/Metropolis-Bold.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'Metropolis-Medium';
+    src: url('../assets/fonts/Metropolis-Medium.otf') format('opentype');
+  }
+  @font-face {
+    font-family: 'Metropolis-Regular';
+    src: url('../assets/fonts/Metropolis-Regular.otf') format('opentype');
+  }
 
   body {
     --ion-color-primary: #428cff;
@@ -236,7 +260,7 @@
 }
 
 html {
-  /* 
+  /*
    * For more information on dynamic font scaling, visit the documentation:
    * https://ionicframework.com/docs/layout/dynamic-font-scaling
    */
