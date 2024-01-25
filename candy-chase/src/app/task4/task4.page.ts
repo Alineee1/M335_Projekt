@@ -46,8 +46,11 @@ export class Task4Page {
 
   async checkChargingStatus() {
     const batteryInfo = await Device.getBatteryInfo();
-    if (batteryInfo.isCharging) {
+    if (batteryInfo.isCharging === true) {
+      console.log('Your phone is charging');
       this.showChargingMessage();
+    } else {
+      console.log('Plug in your phone');
     }
   }
   showChargingMessage() {

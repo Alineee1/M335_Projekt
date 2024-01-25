@@ -11,7 +11,6 @@ import {
   IonTitle,
   IonToolbar,
 } from '@ionic/angular/standalone';
-
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import { Router } from '@angular/router';
@@ -36,26 +35,30 @@ import { Router } from '@angular/router';
 })
 export class Task3Page {
   constructor(private router: Router) {}
+
+  public status: string = 'incorrect';
   startScan = async () => {
     await BarcodeScanner.checkPermission({ force: true });
     await BarcodeScanner.hideBackground();
-    const result = await BarcodeScanner.startScan();
 
-    if (result.hasContent) {
-      if (result.content === 'M335@ICT-BZ') {
-        console.log('Succesful');
-      } else {
-        console.log('wrong');
-      }
-    }
-  };
-  /*openCamera() {
-    const image = Camera.getPhoto({
+    const image = await Camera.getPhoto({
       resultType: CameraResultType.Uri,
       source: CameraSource.Camera,
     });
-    console.log(image);
-  }*/
+
+    console.log('Image captured', image);
+
+    try {
+      const barcodeResult = await BarcodeScanner.startScan();
+      if (barcodeResult.hasContent) {
+        if (barcodeResult.content === 'M335@ICT-BZ') {
+          this.status = 'correct';
+          console.log('Correct QR-Code', barcodeResult);
+        }
+      }
+    } catch {}
+  };
+
   goToTaskFour() {
     this.router.navigate(['task4']);
   }
