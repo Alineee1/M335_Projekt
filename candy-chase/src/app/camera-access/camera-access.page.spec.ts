@@ -1,12 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { WelcomePage } from './welcome.page';
+import { CameraAccessPage } from './camera-access.page';
 
-describe('WelcomePage', () => {
-  let component: WelcomePage;
-  let fixture: ComponentFixture<WelcomePage>;
+describe('CameraAccessPage', () => {
+  let component: CameraAccessPage;
+  let fixture: ComponentFixture<CameraAccessPage>;
 
   beforeEach(async() => {
-    fixture = TestBed.createComponent(WelcomePage);
+    fixture = TestBed.createComponent(CameraAccessPage);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

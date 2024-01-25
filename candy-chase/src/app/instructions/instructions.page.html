@@ -1,0 +1,30 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/"></ion-back-button>
+      <ion-title size="large">Instructions</ion-title>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <p>Here's how it works:
+    <br>
+    <br>
+    <br>
+    Complete your quests
+    as fast as possible and
+    you will earn one candy per
+    quest and rank at the top of the
+    leaderboard.🍭
+    <br>
+    <br>
+    If you're too slow, you'll have
+    to collect poison.🧪</p>
+  <ion-button shape="round" class="ion-padding" (click)="goToCameraAccess()">NEXT</ion-button>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">instructions</ion-title>
+    </ion-toolbar>
+  </ion-header>
+</ion-content>

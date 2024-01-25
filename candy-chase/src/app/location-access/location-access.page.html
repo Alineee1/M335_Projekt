@@ -1,0 +1,19 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>location-access</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">location-access</ion-title>
+    </ion-toolbar>
+  </ion-header>
+  <p>Location Access</p>
+  <img src="assets/images/location.png" alt="location">
+  <p>By allowing us access to
+    your location, you open the
+    door to special challenges.</p>
+  <ion-button (click)="checkLocationPermission()">Request Location Access</ion-button>
+</ion-content>

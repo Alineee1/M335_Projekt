@@ -1,0 +1,21 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Camera Access</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true" class="ion-padding">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Camera Access</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <img src="assets/images/camera.png" alt="camera">
+  <p>For a sugar-sweet adventure in
+    Candy Chase, we need access to
+    your camera.That way you can
+    discover the world of Candy Chase.</p>
+  <ion-button class="padding" (click)="checkCameraPermission()">Request Camera Access</ion-button>
+<ion-button class="padding" (click)="goToLocationPermission()" [disabled]="!isCameraPermissionGranted">NEXT</ion-button>
+</ion-content>

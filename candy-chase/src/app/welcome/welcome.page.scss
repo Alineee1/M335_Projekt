@@ -1,13 +1,31 @@
-h1{
+p{
 font-family: "Hey Elsie", sans-serif;
   color: #707070;
+  padding: 2%;
 }
 
 h2{
   font-family: "Metropolis-Bold", sans-serif;
   color: #707070;
+  padding: 2%;
 }
 
-ion-content ion-button{
+ion-item{
+  color: #707070;
+}
+
+.list-color ion-item:nth-child(-n+3){
+  --background:#FFE5F6;
+}
+
+ion-content ion-button [slot='fixed']{
   font-family: "Metropolis-ExtraBold", sans-serif;
+  top: 50%;
+  right: 20px;
+  font-weight: bold;
+}
+
+p sub {
+  font-size: 100%;
+  vertical-align: middle;
 }
