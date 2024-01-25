@@ -11,15 +11,12 @@ import {
   IonText,
 } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
-import { Plugin } from '@capacitor/core';
-import {
-  Camera,
-  PermissionStatus,
-  CameraPluginPermissions,
-} from '@capacitor/camera';
+
+import { Camera } from '@capacitor/camera';
 import { Capacitor } from '@capacitor/core';
 import { Router } from '@angular/router';
 import { defineCustomElement } from '@ionic/angular/standalone/directives/angular-component-lib/utils';
+import { Geolocation } from '@capacitor/geolocation';
 
 @Component({
   selector: 'app-camera-access',
@@ -77,4 +74,13 @@ export class CameraAccessPage {
       console.warn('Camera permission not granted. Cannot proceed');
     }
   }
+  /*ngOnInit() {
+    this.checkAndRequestPermissions();
+  }
+  private async checkAndRequestPermissions() {
+    const status = await Geolocation.checkPermissions();
+    if (status.location !== 'granted') {
+      await Geolocation.requestPermissions();
+    }
+  }*/
 }

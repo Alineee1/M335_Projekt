@@ -12,4 +12,9 @@
   </ion-header>
   <h1>Go to the ping-pong table</h1>
 
+  <p>You are {{ distanceToTarget | number : '1.0-0' }}  meters away from your destination.</p>
+  <ng-template #loading>
+    <p>Calculating distance...</p>
+  </ng-template>
+<ion-button (click)="goToTaskTwo()">NEXT</ion-button>
 </ion-content>

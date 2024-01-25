@@ -34,9 +34,9 @@ import { Capacitor } from '@capacitor/core';
   ],
 })
 export class LocationAccessPage {
-  isLocationPermissionGranted = false;
+  /*isLocationPermissionGranted = false;*/
   constructor(private router: Router) {}
-  async checkLocationPermission() {
+  /*async checkLocationPermission() {
     const permissions = await Geolocation.checkPermissions();
     if (permissions.location === 'granted') {
       console.log('Granted');
@@ -74,4 +74,29 @@ export class LocationAccessPage {
 
     return permissionRequest.location === 'granted';
   }*/
+  ngOnInit() {
+    this.checkAndRequestPermissions();
+  }
+  /*async checkAndRequestPermissions() {
+    const status = await Geolocation.checkPermissions();
+    if (status.location !== 'granted') {
+      await Geolocation.requestPermissions();
+    }
+  }*/
+  async checkAndRequestPermissions() {
+    try {
+      const status = await Geolocation.checkPermissions();
+      console.log('Permission status:', status);
+
+      if (status.location !== 'granted') {
+        const newStatus = await Geolocation.requestPermissions();
+        console.log('New permission status:', newStatus);
+      }
+    } catch (error) {
+      console.error('Error checking/requesting permissions:', error);
+    }
+  }
+  goToTaskOne() {
+    this.router.navigate(['task1']);
+  }
 }
