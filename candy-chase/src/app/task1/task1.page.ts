@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -41,7 +41,10 @@ export class Task1Page {
     latitude: 47.071945403994924,
     longitude: 8.348885173299777,
   };
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private cd: ChangeDetectorRef,
+  ) {}
   goToTaskTwo() {
     this.router.navigate(['task2']);
   }
@@ -70,6 +73,7 @@ export class Task1Page {
             this.targetLocation,
           );
           console.log(`Distance to target: ${this.distanceToTarget} meters`);
+          this.cd.detectChanges();
         }
       });
       this.watchId = id;

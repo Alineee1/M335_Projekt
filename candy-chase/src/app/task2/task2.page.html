@@ -11,5 +11,6 @@
     </ion-toolbar>
   </ion-header>
   <h2>Walk 15 meters.</h2>
+  <p>You still need to walk {{ remainingDistance | number : '1.0-0' }} meters to complete this task.</p>
   <ion-button (click)="goToTaskThree()">NEXT</ion-button>
 </ion-content>

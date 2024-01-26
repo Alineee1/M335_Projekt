@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -33,7 +33,7 @@ import { Capacitor } from '@capacitor/core';
     IonText,
   ],
 })
-export class LocationAccessPage {
+export class LocationAccessPage implements OnInit {
   /*isLocationPermissionGranted = false;*/
   constructor(private router: Router) {}
   /*async checkLocationPermission() {
@@ -77,17 +77,11 @@ export class LocationAccessPage {
   ngOnInit() {
     this.checkAndRequestPermissions();
   }
-  /*async checkAndRequestPermissions() {
-    const status = await Geolocation.checkPermissions();
-    if (status.location !== 'granted') {
-      await Geolocation.requestPermissions();
-    }
-  }*/
-  async checkAndRequestPermissions() {
+
+  private async checkAndRequestPermissions() {
     try {
       const status = await Geolocation.checkPermissions();
       console.log('Permission status:', status);
-
       if (status.location !== 'granted') {
         const newStatus = await Geolocation.requestPermissions();
         console.log('New permission status:', newStatus);
