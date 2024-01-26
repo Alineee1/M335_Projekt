@@ -6,8 +6,10 @@ import { IonicModule } from '@ionic/angular';
 import {
   IonAlert,
   IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonItem,
   IonList,
   IonText,
@@ -16,7 +18,9 @@ import {
 } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { Router } from '@angular/router';
-
+import { PoisonsService } from '../services/poisons.service';
+import { LollipopService } from '../services/lollipop.service';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 @Component({
   selector: 'app-task2',
   templateUrl: './task2.page.html',
@@ -34,6 +38,8 @@ import { Router } from '@angular/router';
     IonAlert,
     IonText,
     DecimalPipe,
+    IonButtons,
+    IonIcon,
   ],
 })
 export class Task2Page implements OnInit {
@@ -41,13 +47,20 @@ export class Task2Page implements OnInit {
   public distanceWalked: number = 0;
   private startPosition: Position | null = null;
   private targetDistance: number = 15; // target distance in meters
+  private scanStartTime: number = 0;
+  private timeLimitForFastScan: number = 90000;
+  public congratulationsMessage = '';
+  public failureMessage = '';
   constructor(
     private router: Router,
     private cd: ChangeDetectorRef,
+    private lollipopService: LollipopService,
+    private poisonsService: PoisonsService,
   ) {}
 
   ngOnInit() {
     this.startWatchingPosition();
+    this.scanStartTime = Date.now();
   }
   public get remainingDistance(): number {
     const remaining = this.targetDistance - this.distanceWalked;
@@ -106,5 +119,25 @@ export class Task2Page implements OnInit {
 
   goToTaskThree() {
     this.router.navigate(['task3']);
+  }
+  async showSuccessMessage() {
+    const lollipopsCollected = this.lollipopService.getLollipopsCount();
+    this.congratulationsMessage = `Congratulations! You've completed the task.
+Here's your candy 🍭
+You've collected ${lollipopsCollected} lollipop(s) so far.`;
+    this.lollipopService.collectLollipop();
+    await Haptics.impact({ style: ImpactStyle.Medium });
+  }
+
+  async showFailureMessage() {
+    const lollipopsCollected = this.lollipopService.getLollipopsCount();
+    const poisonsCollected = this.poisonsService.getPoisonsCount();
+    this.failureMessage = `You completed the task, but it took a bit long.
+Here's your poison🧪 and your candy 🍭
+You've collected ${poisonsCollected} poisons and ${lollipopsCollected} lollipop(s) so far.`;
+    await Haptics.impact({ style: ImpactStyle.Medium });
+  }
+  cancelTask() {
+    this.router.navigate(['']);
   }
 }

@@ -1,11 +1,13 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { DecimalPipe, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   IonAlert,
   IonButton,
+  IonButtons,
   IonContent,
   IonHeader,
+  IonIcon,
   IonItem,
   IonList,
   IonText,
@@ -14,10 +16,9 @@ import {
 } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { Device } from '@capacitor/device';
-import { LollipopService } from '../lollipop.service';
-import { PoisonsService } from '../poisons.service';
-import { ChangeDetectorRef } from '@angular/core';
-import { catchError } from 'rxjs';
+import { LollipopService } from '../services/lollipop.service';
+import { PoisonsService } from '../services/poisons.service';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-task4',
@@ -37,15 +38,20 @@ import { catchError } from 'rxjs';
     IonText,
     DecimalPipe,
     NgIf,
+    IonButtons,
+    IonIcon,
   ],
 })
 export class Task4Page {
   isPhoneCharging = false;
   isPhoneChargingSlow = false;
   congratulationsMessage = '';
-  slowChargingMessage = '';
+  failureMessage = '';
   notChargingMessage = '';
   chargingStartTime: number = 0;
+  private scanStartTime: number = 0;
+  private timeLimitForFastScan: number = 90000;
+  slowChargingMessage: string = '';
   constructor(
     public lollipopService: LollipopService,
     public poisonsService: PoisonsService,
@@ -58,6 +64,7 @@ export class Task4Page {
   async checkChargingStatus() {
     this.chargingStartTime = Date.now();
     const batteryInfo = await Device.getBatteryInfo();
+
     if (batteryInfo.isCharging === true) {
       this.isPhoneCharging = true;
       console.log('Your phone is charging');
@@ -71,33 +78,44 @@ export class Task4Page {
         this.checkChargingStatus();
       }, 5000);
     }
+
+    this.changeDetectorRef.detectChanges();
+
     const elapsedTime = Date.now() - this.chargingStartTime;
     const elapsedMinutes = elapsedTime / (1000 * 60);
     if (!this.isPhoneCharging && elapsedMinutes > 1) {
       this.isPhoneChargingSlow = true;
-      this.showSlowChargingMessage();
+      this.showfailureMessage();
     }
     this.changeDetectorRef.detectChanges();
   }
 
-  showChargingMessage() {
+  async showChargingMessage() {
     const lollipopsCollected = this.lollipopService.getLollipopsCount();
     this.congratulationsMessage = `You connected your phone, great!
 Here's your candy 🍭
 You've collected ${lollipopsCollected} lollipop(s) so far.`;
+    await Haptics.impact({ style: ImpactStyle.Medium });
+    this.lollipopService.collectLollipop();
   }
 
-  showSlowChargingMessage() {
+  async showfailureMessage() {
     const lollipopsCollected = this.lollipopService.getLollipopsCount();
     const poisonsCollected = this.poisonsService.getPoisonsCount();
-    this.slowChargingMessage = `You took too long to charge your phone and risked a low battery.
+    this.failureMessage = `You took too long to charge your phone and risked a low battery.
     Here's your poison🧪 and your candy 🍭
     You've collected ${poisonsCollected} poisons and ${lollipopsCollected} lollipop(s) so far.`;
+    await Haptics.impact({ style: ImpactStyle.Medium });
+    this.lollipopService.collectLollipop();
+    this.poisonsService.collectPoison();
   }
   showNotChargingMessage() {
     this.notChargingMessage = 'Charge your phone';
   }
   goToFinalPage() {
     this.router.navigate(['final-page']);
+  }
+  cancelTask() {
+    this.router.navigate(['']);
   }
 }

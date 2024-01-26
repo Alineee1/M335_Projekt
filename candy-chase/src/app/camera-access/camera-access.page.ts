@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, inject } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -37,6 +37,8 @@ import { Geolocation } from '@capacitor/geolocation';
   ],
 })
 export class CameraAccessPage {
+  private cd = inject(ChangeDetectorRef);
+
   isCameraPermissionGranted = false;
   /*checkPermissions() => Promise<PermissionStatus>*/
 
@@ -46,6 +48,7 @@ export class CameraAccessPage {
     if (permissions.camera === 'granted') {
       console.log('Granted');
       this.isCameraPermissionGranted = true;
+      this.cd.detectChanges();
     } else {
       this.requestCameraPermission();
     }

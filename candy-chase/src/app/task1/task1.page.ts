@@ -9,11 +9,17 @@ import {
   IonButton,
   IonAlert,
   IonText,
+  IonButtons,
+  IonIcon,
 } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
 import { Geolocation } from '@capacitor/geolocation';
-import { DecimalPipe } from '@angular/common';
+import { DecimalPipe, NgIf } from '@angular/common';
 import { Router } from '@angular/router';
+import { PoisonsService } from '../services/poisons.service';
+import { LollipopService } from '../services/lollipop.service';
+import { TimeService } from '../services/time.service';
+import { Haptics, ImpactStyle } from '@capacitor/haptics';
 
 @Component({
   selector: 'app-task1',
@@ -32,11 +38,21 @@ import { Router } from '@angular/router';
     IonAlert,
     IonText,
     DecimalPipe,
+    NgIf,
+    IonButtons,
+    IonIcon,
   ],
 })
 export class Task1Page {
+  isLocationReached = false;
+  reachedMessage = '';
   private watchId: string | null = null;
   public distanceToTarget: number | null = null;
+  private scanStartTime: number = 0;
+  private timeLimitForFastScan: number = 90000;
+  public congratulationsMessage = '';
+  public failureMessage = '';
+  private thresholdDistance: number = 10; //distance in m
   private targetLocation = {
     latitude: 47.071945403994924,
     longitude: 8.348885173299777,
@@ -44,14 +60,16 @@ export class Task1Page {
   constructor(
     private router: Router,
     private cd: ChangeDetectorRef,
+    private timeService: TimeService,
+    private lollipopService: LollipopService,
   ) {}
   goToTaskTwo() {
     this.router.navigate(['task2']);
   }
-  ngOnInit() {
-    this.checkAndRequestPermissions().then(() => {
-      this.startWatchingPosition();
-    });
+  async ngOnInit() {
+    this.timeService.startTimer();
+    await this.checkAndRequestPermissions();
+    await this.startWatchingPosition();
     // TODO: await
   }
   private async checkAndRequestPermissions() {
@@ -62,21 +80,35 @@ export class Task1Page {
   }
   private async startWatchingPosition() {
     try {
-      const id = await Geolocation.watchPosition({}, (position, err) => {
-        if (err) {
-          console.error('Error watching position:', err);
-          return;
-        }
-        if (position) {
-          this.distanceToTarget = this.calculateDistance(
-            position.coords,
-            this.targetLocation,
-          );
-          console.log(`Distance to target: ${this.distanceToTarget} meters`);
-          this.cd.detectChanges();
-        }
-      });
-      this.watchId = id;
+      await Geolocation.watchPosition(
+        { enableHighAccuracy: true },
+        (position, err) => {
+          if (err) {
+            console.error('Error watching position:', err);
+            return;
+          }
+          if (position) {
+            const distance = this.calculateDistance(
+              position.coords,
+              this.targetLocation,
+            );
+
+            if (distance <= this.thresholdDistance) {
+              this.distanceToTarget = 0;
+              this.isLocationReached = true;
+              this.reachedMessage = 'You reached your destination!';
+              this.lollipopService.collectLollipop();
+              Haptics.impact({
+                style: ImpactStyle.Medium,
+              });
+            } else {
+              this.distanceToTarget = distance;
+            }
+            console.log(`Distance to target: ${this.distanceToTarget} meters`);
+            this.cd.detectChanges();
+          }
+        },
+      );
     } catch (err) {
       console.error('Error starting geolocation watch:', err);
     }
@@ -105,8 +137,14 @@ export class Task1Page {
   }
 
   ngOnDestroy() {
+    const elapsedTime = this.timeService.stopTimer();
+    console.log(`Elapsed time in Task1Page: ${elapsedTime} milliseconds`);
+
     if (this.watchId) {
       Geolocation.clearWatch({ id: this.watchId });
     }
+  }
+  cancelTask() {
+    this.router.navigate(['']);
   }
 }

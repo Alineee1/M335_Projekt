@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
   IonHeader,
   IonToolbar,
@@ -34,6 +34,7 @@ import { Capacitor } from '@capacitor/core';
   ],
 })
 export class LocationAccessPage implements OnInit {
+  private cd = inject(ChangeDetectorRef);
   /*isLocationPermissionGranted = false;*/
   constructor(private router: Router) {}
   /*async checkLocationPermission() {
@@ -74,17 +75,17 @@ export class LocationAccessPage implements OnInit {
 
     return permissionRequest.location === 'granted';
   }*/
-  ngOnInit() {
-    this.checkAndRequestPermissions();
-  }
+  async ngOnInit() {}
 
-  private async checkAndRequestPermissions() {
+  protected async checkAndRequestPermissions() {
     try {
       const status = await Geolocation.checkPermissions();
       console.log('Permission status:', status);
-      if (status.location !== 'granted') {
+
+      if (status.location !== 'granted' && status.location !== 'prompt') {
         const newStatus = await Geolocation.requestPermissions();
         console.log('New permission status:', newStatus);
+        this.cd.detectChanges();
       }
     } catch (error) {
       console.error('Error checking/requesting permissions:', error);

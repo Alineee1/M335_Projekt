@@ -1,5 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelTask()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
     <ion-title>Task 3</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -11,9 +16,15 @@
     </ion-toolbar>
   </ion-header>
   <h2>Go to the cafeteria and find the right QR-Code and scan it.</h2>
+  <ion-text *ngIf="isQRCodeCorrect">
+    <p>{{congratulationsMessage}}</p>
+  </ion-text>
+  <ion-text *ngIf="!isQRCodeCorrect">
+    <p>{{failureMessage}}</p>
+  </ion-text>
   <ion-button class="padding" (click)="startScan()">Open camera</ion-button>
-  <ion-button class="padding" (click)="goToTaskFour()" >NEXT</ion-button>
-  <!--[disabled]="!isQRCodeCorrect"-->
+  <ion-button class="padding" (click)="goToTaskFour()" [disabled]="!isQRCodeCorrect" >NEXT</ion-button>
+  <!---->
 
 
 </ion-content>

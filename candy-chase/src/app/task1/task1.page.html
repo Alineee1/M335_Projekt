@@ -1,5 +1,10 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="cancelTask()">
+        Cancel
+      </ion-button>
+    </ion-buttons>
     <ion-title>Task 1</ion-title>
   </ion-toolbar>
 </ion-header>
@@ -16,5 +21,8 @@
   <ng-template #loading>
     <p>Calculating distance...</p>
   </ng-template>
+  <ion-text *ngIf="isLocationReached">
+    <p>{{reachedMessage}}</p>
+  </ion-text>
 <ion-button (click)="goToTaskTwo()">NEXT</ion-button>
 </ion-content>

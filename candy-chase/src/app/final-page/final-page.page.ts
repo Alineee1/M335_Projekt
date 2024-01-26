@@ -11,8 +11,8 @@ import {
   IonToolbar,
 } from '@ionic/angular/standalone';
 import { ExploreContainerComponent } from '../explore-container/explore-container.component';
-import { LollipopService } from '../lollipop.service';
-import { PoisonsService } from '../poisons.service';
+
+import { DataService } from '../services/data.service';
 
 @Component({
   selector: 'app-final-page',
@@ -35,13 +35,14 @@ import { PoisonsService } from '../poisons.service';
 export class FinalPagePage implements OnInit {
   collectedCandy: number = 0;
   encounteredPoison: number = 0;
-  constructor(
-    private lollipopService: LollipopService,
-    private poisonsService: PoisonsService,
-  ) {}
-
+  userRank: number = 0;
+  elapsedTime: number = 0;
+  constructor(private dataService: DataService) {}
   ngOnInit() {
-    this.collectedCandy = this.lollipopService.getLollipopsCount();
-    this.encounteredPoison = this.poisonsService.getPoisonsCount();
+    const overallData = this.dataService.getOverallData();
+    this.collectedCandy = overallData.lollipops;
+    this.encounteredPoison = overallData.poisons;
+    this.userRank = overallData.userRank;
+    this.elapsedTime = overallData.elapsedTime;
   }
 }
